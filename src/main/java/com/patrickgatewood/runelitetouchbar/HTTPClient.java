@@ -10,6 +10,7 @@ import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import lombok.extern.slf4j.Slf4j;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 import java.io.IOException;
 
@@ -23,7 +24,49 @@ public class HTTPClient {
             .client(okHttpClient)
             .baseUrl(BASE_URL)
             .build();
-    static final TouchBarAPI touchBarAPI = retrofit.create(TouchBarAPI.class);
+    private static final TouchBarAPI touchBarAPI = retrofit.create(TouchBarAPI.class);
+
+    static void toggleControlStrip(boolean showControlStrip) {
+        touchBarAPI.toggleControlStrip(showControlStrip).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                log.info("showing control strip: {}", showControlStrip);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                log.info("failed to toggle the control strip: " + t.toString());
+            }
+        });
+    }
+
+    static void presentFKeyTouchBar() {
+        touchBarAPI.presentFKeyTouchBar().enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                log.info("presented the F Keys Touch Bar!");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                log.info("failed to present the F Keys touch bar: " + t.toString());
+            }
+        });
+    }
+
+    static void presentTouchBarCustomizationWindow() {
+        touchBarAPI.presentTouchBarCustomizationWindow().enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                log.info("presenting the touch bar customization window");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                log.info("failed to customize the touch bar: " + t.toString());
+            }
+        });
+    }
 
     static void killTouchBar() {
         touchBarAPI.killTouchBar().enqueue(new Callback<ResponseBody>() {
@@ -41,6 +84,15 @@ public class HTTPClient {
 }
 
 interface TouchBarAPI {
+    @POST("toggleControlStrip")
+    Call<ResponseBody> toggleControlStrip(@Query("enabled") Boolean showControlStrip);
+
+    @POST("presentfkeytouchbar")
+    Call<ResponseBody> presentFKeyTouchBar();
+
+    @POST("customizeFKeyTouchBar")
+    Call<ResponseBody> presentTouchBarCustomizationWindow();
+
     @POST("killtouchbar")
     Call<ResponseBody> killTouchBar();
 }
