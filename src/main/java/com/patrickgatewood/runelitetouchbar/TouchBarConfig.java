@@ -4,16 +4,22 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 
-@ConfigGroup("touchbar")
+@ConfigGroup(TouchBarConfig.groupName)
 public interface TouchBarConfig extends Config
 {
-	@ConfigItem(
-		keyName = "greeting",
-		name = "Welcome Greeting",
-		description = "The message to show to the user when they login"
-	)
-	default String greeting()
+	String groupName = "touchBar";
+
+	enum TouchBarType
 	{
-		return "Hello";
+		DEFAULT_F_KEYS,
+		CUSTOM_F_KEYS,
+		DYNAMIC,
+		NONE
 	}
+	@ConfigItem(
+			keyName = "touchBarType",
+			name = "Touch Bar Type",
+			description = "Which controls and information to show in the Touch Bar"
+	)
+	default TouchBarType enumConfig() { return TouchBarType.DEFAULT_F_KEYS; }
 }
