@@ -13,6 +13,8 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 
+// TODO: - Add macOS minimum version specifier here and in the plugin properties.
+//  Also see if we can hide the plugin on unsupported systems.
 @Slf4j
 @PluginDescriptor(
 	name = "Touch Bar",
@@ -32,21 +34,13 @@ public class TouchBarPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
+		// TODO: - Launch the OSRS Touch Bar process.
 		// TODO: - Get the user's F-key settings from the client (F1 attack styles, etc)
 	}
 
 	@Override
 	protected void shutDown() throws Exception
 	{
-	}
-
-	@Subscribe
-	public void onGameStateChanged(GameStateChanged gameStateChanged)
-	{
-		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
-		{
-//			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Touch Bar says " + config.greeting(), null);
-		}
 	}
 
 	@Provides
@@ -64,6 +58,7 @@ public class TouchBarPlugin extends Plugin
 		switch (event.getKey()) {
 			case "touchBarType":
 				log.info("new config value: " + event.getNewValue());
+				HTTPClient.killTouchBar();
 				break;
 			default:
 				break;

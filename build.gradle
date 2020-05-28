@@ -23,6 +23,8 @@ dependencies {
 	testImplementation group: 'net.runelite', name:'client', version: runeLiteVersion, {
 		exclude group: 'ch.qos.logback', module: 'logback-classic'
 	}
+
+	implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 }
 
 group = 'com.patrickgatewood.runelitetouchbar'
