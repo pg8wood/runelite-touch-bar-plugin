@@ -10,6 +10,8 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
+import java.io.IOException;
+
 // TODO: - Add macOS minimum version specifier here and in the plugin properties.
 //  Also see if we can hide the plugin on unsupported systems.
 @Slf4j
@@ -28,13 +30,21 @@ public class TouchBarPlugin extends Plugin
 	@Inject
 	private TouchBarConfig config;
 
+	private Process touchBarProcess;
+
 	@Override
 	protected void startUp() throws Exception
 	{
-		// TODO: - Launch the OSRS Touch Bar process.
 		// TODO: - Get the user's F-key settings from the client (F1 attack styles, etc)
+		launchOSRSTouchBar();
+		loadConfigAndPresentTouchBar(); // should this be done on login?
+	}
 
-		loadConfigAndPresentTouchBar();
+	private void launchOSRSTouchBar() throws IOException {
+		// TODO: package OSRS touch bar with the plugin and update this path. Figure out CI for how to update OSRS touch bar _and_ this Runelite plugin together
+		// Or actually just package the whole mac app with this project
+		ProcessBuilder pb = new ProcessBuilder("open", "/Users/patrickgatewood/Library/Developer/Xcode/DerivedData/OSRS_Touch_Bar-gsxrpfeqgppvdcbcqmjifxtqpyen/Build/Products/Debug/OSRS Touch Bar.app");
+		touchBarProcess = pb.start();
 	}
 
 	private void loadConfigAndPresentTouchBar() {
@@ -55,6 +65,7 @@ public class TouchBarPlugin extends Plugin
 	protected void shutDown() throws Exception
 	{
 		// TODO: restore control strip prefs and whatever else
+		touchBarProcess.destroy();
 	}
 
 	@Provides
