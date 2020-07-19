@@ -30,8 +30,6 @@ public class TouchBarPlugin extends Plugin
 	@Inject
 	private TouchBarConfig config;
 
-	private Process touchBarProcess;
-
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -43,8 +41,8 @@ public class TouchBarPlugin extends Plugin
 	private void launchOSRSTouchBar() throws IOException {
 		// TODO: package OSRS touch bar with the plugin and update this path. Figure out CI for how to update OSRS touch bar _and_ this Runelite plugin together
 		// Or actually just package the whole mac app with this project
-		ProcessBuilder pb = new ProcessBuilder("open", "/Users/patrickgatewood/Library/Developer/Xcode/DerivedData/OSRS_Touch_Bar-gsxrpfeqgppvdcbcqmjifxtqpyen/Build/Products/Debug/OSRS Touch Bar.app");
-		touchBarProcess = pb.start();
+		String touchBarAppPath ="/Users/patrickgatewood/Library/Developer/Xcode/DerivedData/OSRS_Touch_Bar-gsxrpfeqgppvdcbcqmjifxtqpyen/Build/Products/Debug/OSRS Touch Bar.app";
+		new ProcessBuilder("open", touchBarAppPath).start();
 	}
 
 	private void loadConfigAndPresentTouchBar() {
@@ -64,8 +62,8 @@ public class TouchBarPlugin extends Plugin
 	@Override
 	protected void shutDown() throws Exception
 	{
-		// TODO: restore control strip prefs and whatever else
-		touchBarProcess.destroy();
+		// Note: killing the Touch Bar, restoring the Control Strip, etc. are handled natively by the Cocoa app.
+		
 	}
 
 	@Provides
